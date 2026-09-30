@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Guía de estudio: Principio de Pascal</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#eaf1f2;--card:#fff;--ink:#12303a;--mut:#5b7480;--line:#c9d9dd;--acc:#0b6f84;--acc2:#b8560f;--ok:#1b7a43;--bad:#b3261e;--soft:#dcebee;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1f26;--card:#14303a;--ink:#e3f0f2;--mut:#9ab5bd;--line:#2a4a56;--acc:#4cc3da;--acc2:#f0a15f;--ok:#6fd39a;--bad:#ff8a80;--soft:#1b3d49}}
+:root[data-theme="dark"]{--bg:#0d1f26;--card:#14303a;--ink:#e3f0f2;--mut:#9ab5bd;--line:#2a4a56;--acc:#4cc3da;--acc2:#f0a15f;--ok:#6fd39a;--bad:#ff8a80;--soft:#1b3d49}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "IBM Plex Sans",system-ui,sans-serif}
+header{background:var(--acc);color:#fff;padding:22px 16px 18px}
+header .in,main{max-width:920px;margin:0 auto}
+header p{margin:0;font-size:15px;opacity:.92}
+header .name{font-weight:600;font-size:17px;margin-bottom:4px}
+h1{font:700 clamp(24px,5vw,34px)/1.15 "Source Serif 4",Georgia,serif;margin:6px 0 4px}
+main{padding:16px}
+section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:16px}
+h2{font:700 21px "Source Serif 4",Georgia,serif;margin:0 0 10px}
+h3{font-size:16px;margin:14px 0 4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+label{display:block;font-size:14px;font-weight:600;margin-bottom:3px}
+.row{display:flex;gap:6px}
+input,select,button{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:7px;padding:8px 9px;min-width:0}
+input{flex:1;width:100%}
+button{cursor:pointer;font-weight:600}
+button.p{background:var(--acc);color:#fff;border-color:var(--acc)}
+:focus-visible{outline:3px solid var(--acc2);outline-offset:2px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;align-items:center}
+.seg button{border-radius:0}.seg button:first-child{border-radius:7px 0 0 7px}.seg button:last-child{border-radius:0 7px 7px 0}
+.seg button[aria-pressed=true]{background:var(--acc);color:#fff}
+.eq{background:var(--soft);border-radius:7px;padding:8px 10px;margin:6px 0;overflow-x:auto;font-family:"Source Serif 4",Georgia,serif;font-size:17px;white-space:nowrap}
+.res{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:12px}
+.res div{border:1px solid var(--line);border-radius:8px;padding:10px}
+.res b{display:block;font:700 20px "Source Serif 4",Georgia,serif;overflow-wrap:anywhere}
+.res span{font-size:13px;color:var(--mut)}
+.note{border-left:4px solid var(--acc2);padding:6px 10px;background:var(--soft);border-radius:0 7px 7px 0;margin:10px 0;font-size:15px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+td,th{border-bottom:1px solid var(--line);padding:6px;text-align:left}
+.wrap{overflow-x:auto}
+.fb{font-size:14px;margin-top:3px;min-height:20px}.ok{color:var(--ok)}.bad{color:var(--bad)}
+svg{width:100%;max-width:340px;height:auto;display:block;margin:8px auto}
+</style>
+</head>
+<body>
+<header><div class="in">
+<p class="name">Ing. Jhon Camacho Azan, Mgs</p>
+<h1>Principio de Pascal: prensa hidráulica</h1>
+<p>Diseño Hidráulico · Agropecuaria · Tercer ciclo · Guía de estudio</p>
+</div></header>
+<main>
+<section aria-labelledby="t1">
+<h2 id="t1">El problema</h2>
+<p>En una prensa hidráulica, los cilindros tienen radios distintos. Sobre el émbolo de área menor se ejerce una fuerza conocida. <b>¿Qué fuerza ejerce la prensa sobre el émbolo mayor?</b></p>
+<p style="color:var(--mut);font-size:15px">Enunciado base de la hoja: radios de 1 cm y 8 cm, fuerza de 10 N sobre el émbolo menor.</p>
+<div class="note">Los datos llegan en unidades mezcladas: la fuerza en dinas, el radio menor en pulgadas y el radio mayor en pies. Convierte todo al SI (N y m) antes de calcular.</div>
+<h3>Tus datos</h3>
+<div class="grid" id="inp"></div>
+<div class="bar"><button class="p" id="calc" type="button">Resolver paso a paso</button><button id="rand" type="button">Ejercicio aleatorio</button><button id="ex0" type="button">Ejemplo del enunciado</button><button id="ex" type="button">Ejemplo del Excel</button></div>
+</section>
+<section id="sol" aria-live="polite" hidden><h2>Solución</h2><div id="steps"></div><div class="res" id="res"></div></section>
+<section aria-labelledby="t3">
+<h2 id="t3">Ponte a prueba</h2>
+<p>Resuelve en tu cuaderno con los datos de arriba y escribe tus resultados en unidades del SI (N y m). Se acepta un error de 1 %.</p>
+<div class="grid" id="quiz"></div>
+<div class="bar"><button class="p" id="chk" type="button">Comprobar</button><b id="score"></b></div>
+<p style="font-size:14px;color:var(--mut)">La hoja solo indica una calificación total manual sobre 10. Este puntaje es orientativo: F₁ (2), r₁ (2), r₂ (2) y F₂ (4). El docente puede ajustarlo.</p>
+</section>
+<section aria-labelledby="t4">
+<h2 id="t4">Ideas clave y errores frecuentes</h2>
+<div class="wrap"><table>
+<tr><th>Concepto</th><th>Fórmula</th></tr>
+<tr><td>Principio de Pascal</td><td>La presión aplicada a un fluido encerrado se transmite igual en todos sus puntos: P₁ = P₂</td></tr>
+<tr><td>Presión</td><td>P = F / A</td></tr>
+<tr><td>Prensa hidráulica</td><td>F₁ / A₁ = F₂ / A₂</td></tr>
+<tr><td>Área del émbolo</td><td>A = π · r²</td></tr>
+<tr><td>Fuerza en el émbolo mayor</td><td>F₂ = F₁ · A₂ / A₁ = F₁ · (r₂ / r₁)²</td></tr>
+<tr><td>Equivalencias</td><td>1 N = 100 000 dinas · 1 in = 0,0254 m · 1 ft = 0,3048 m</td></tr>
+</table></div>
+<ul>
+<li>Las áreas dependen del radio al <b>cuadrado</b>: si r₂ es 8 veces r₁, la fuerza se multiplica por 64.</li>
+<li>Como se usa la razón de áreas, r₁ y r₂ deben estar en la <b>misma unidad</b>. Mezclar pulgadas con pies sin convertir es el error más común.</li>
+<li>Convierte la fuerza de dinas a newtons dividiendo entre 100 000.</li>
+<li>La prensa multiplica la fuerza, no la energía: el émbolo mayor se desplaza menos que el menor.</li>
+</ul>
+</section>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const UF=[['dinas',1e-5],['N',1],['kgf',9.80665],['lbf',4.44822]],U1=[['in',.0254],['cm',.01],['mm',.001],['m',1],['ft',.3048]],U2=[['ft',.3048],['in',.0254],['cm',.01],['m',1]];
+const F=[['f1','Fuerza 1 (émbolo menor)',UF,0],['r1','Radio 1 (émbolo menor)',U1,0],['r2','Radio 2 (émbolo mayor)',U2,0]];
+$('inp').innerHTML=F.map(f=>`<div><label for="${f[0]}">${f[1]}</label><div class="row"><input id="${f[0]}" type="number" step="any" min="0"><select id="${f[0]}u" aria-label="Unidad ${f[1]}">${f[2].map((u,i)=>`<option value="${u[1]}"${i==f[3]?' selected':''}>${u[0]}</option>`).join('')}</select></div></div>`).join('');
+const fmt=(x,d=6)=>Number(x).toLocaleString('es-EC',{maximumSignificantDigits:d});
+let cur=null;
+function setVals(a,u){F.forEach((f,i)=>{$(f[0]).value=a[i];$(f[0]+'u').selectedIndex=u[i]});solve()}
+$('ex0').onclick=()=>setVals([10,1,8],[1,1,1]);
+$('ex').onclick=()=>setVals([4043867,3.6,0.88],[0,0,0]);
+$('rand').onclick=()=>{const R=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;setVals([R(2000000,8000000),R(3,20)/5,R(5,50)/50],[0,0,0])};
+$('calc').onclick=solve;
+function calc(){
+ const x={};for(const f of F){const v=parseFloat($(f[0]).value);if(!(v>0))return null;x[f[0]]=v*(+$(f[0]+'u').value)}
+ const A1=Math.PI*x.r1**2,A2=Math.PI*x.r2**2,P=x.f1/A1,f2=x.f1*A2/A1;
+ return {...x,A1,A2,P,f2,k:A2/A1};
+}
+function solve(){const c=calc();if(!c){alert('Completa las tres casillas con valores mayores que cero.');return}cur=c;$('sol').hidden=false;render()}
+function render(){
+ const c=cur,s=(t,eq,v)=>`<h3>${t}</h3><div class="eq">${eq}</div>${v?`<p>${v}</p>`:''}`;
+ $('steps').innerHTML=
+ s('0. Convertir al SI',`F₁ = ${fmt(c.f1)} N`,`r₁ = <b>${fmt(c.r1)} m</b> · r₂ = <b>${fmt(c.r2)} m</b>`)+
+ s('1. Área del émbolo menor',`A₁ = π · r₁² = π · (${fmt(c.r1)})² = ${fmt(c.A1)} m²`)+
+ s('2. Área del émbolo mayor',`A₂ = π · r₂² = π · (${fmt(c.r2)})² = ${fmt(c.A2)} m²`)+
+ s('3. Presión transmitida (Pascal)',`P = F₁ / A₁ = ${fmt(c.f1)} / ${fmt(c.A1)} = ${fmt(c.P)} Pa`,'Esa misma presión actúa sobre el émbolo mayor.')+
+ s('4. Fuerza en el émbolo mayor',`F₂ = P · A₂ = F₁ · A₂ / A₁ = ${fmt(c.f1)} · ${fmt(c.k)} = ${fmt(c.f2)} N`,`<b>F₂ = ${fmt(c.f2)} N</b> (${fmt(c.f2*1e5)} dinas). La prensa multiplica la fuerza por ${fmt(c.k,5)}, que es (r₂/r₁)².`);
+ $('res').innerHTML=[['Fuerza 1',fmt(c.f1,5)+' N'],['Radio 1',fmt(c.r1,5)+' m'],['Radio 2',fmt(c.r2,5)+' m'],['Área 1',fmt(c.A1,5)+' m²'],['Área 2',fmt(c.A2,5)+' m²'],['Presión',fmt(c.P,5)+' Pa'],['Fuerza 2',fmt(c.f2,5)+' N']].map(x=>`<div><span>${x[0]}</span><b>${x[1]}</b></div>`).join('');
+}
+const Q=[['F₁ (N)','f1',2],['r₁ (m)','r1',2],['r₂ (m)','r2',2],['F₂ (N)','f2',4]];
+$('quiz').innerHTML=Q.map(q=>`<div><label for="q${q[1]}">${q[0]}</label><input id="q${q[1]}" type="number" step="any"><div class="fb" id="f${q[1]}"></div></div>`).join('');
+$('chk').onclick=()=>{
+ const c=cur||calc();if(!c){alert('Primero ingresa los datos y pulsa "Resolver paso a paso".');return}cur=c;let tot=0;
+ for(const q of Q){const k=q[1],v=parseFloat($('q'+k).value),f=$('f'+k),r=c[k];
+  if(isNaN(v)){f.className='fb bad';f.textContent='Falta tu respuesta.';continue}
+  if(Math.abs(v-r)<=Math.abs(r)*.01){tot+=q[2];f.className='fb ok';f.textContent='Correcto: '+fmt(r,5)}
+  else{f.className='fb bad';f.textContent='Revisa unidades y conversiones. Esperado: '+fmt(r,5)}}
+ $('score').textContent='Puntaje automático: '+tot.toFixed(1)+' / 10';
+};
+</script>
+</body>
+</html>
